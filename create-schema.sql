@@ -6,7 +6,7 @@ drop table if exists Pallets;
 drop table if exists Orders;
 drop table if exists Customers;
 drop table if exists OrderSpecifications;
-set FOREIGN_KEY_CHECKS=1;
+
 
 create table Warehouses(
 ingredientName varchar(50),
@@ -67,7 +67,7 @@ foreign key (orderId) references Orders(orderId),
 foreign key (cookieName) references Cookies(cookieName)
 );
 
-
+set FOREIGN_KEY_CHECKS=1;
 
 
 
