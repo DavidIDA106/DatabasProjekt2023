@@ -24,7 +24,7 @@ primary key (cookieName)
 
 create table Recipes(
 ingredientName varchar(50),
-cookieName int,
+cookieName varchar(50),
 amount double(2,1),
 primary key (ingredientName, cookieName),
 foreign key (ingredientName) references Ingredients(ingredientName),
@@ -33,12 +33,12 @@ foreign key (cookieName) references Cookies(cookieName)
 
 create table Pallets(
 orderID int,
-cookieName int,
+cookieName varchar(50),
 palletId int auto_increment,
 blockedStatus boolean,
 productionDate datetime,
 location varchar(50),
-delieveyDate datetime,
+deliveryDate datetime,
 primary key (palletId),
 foreign key (cookieName) references Cookies(cookieName),
 foreign key (orderId) references Orders (orderId)
@@ -53,7 +53,7 @@ foreign key(customerName) references Customers(customerName)
 );
 
 create table Customers(
-customerName carchar(50),
+customerName varchar(50),
 address varchar(100),
 primary key(customerName)
 );
@@ -61,7 +61,7 @@ primary key(customerName)
 create table OrderSpecification(
 nbrPallets int,
 orderId int,
-cookieName int,
+cookieName varchar(50),
 primary key (cookieName,orderId),
 foreign key (orderId) references Orders(orderId),
 foreign key (cookieName) references Cookies(cookieName)
