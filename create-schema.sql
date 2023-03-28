@@ -23,7 +23,7 @@ primary key (cookieName)
 );
 
 create table Recipes(
-ingredientName varchar(50), -- autoincrement som cookieid?
+ingredientName varchar(50),
 cookieName int,
 amount double(2,1),
 primary key (ingredientName, cookieName),
@@ -39,7 +39,7 @@ blockedStatus boolean,
 productionDate datetime,
 location varchar(50),
 delieveyDate datetime,
-primary key (palletID),
+primary key (palletId),
 foreign key (cookieName) references Cookies(cookieName),
 foreign key (orderId) references Orders (orderId)
 );
