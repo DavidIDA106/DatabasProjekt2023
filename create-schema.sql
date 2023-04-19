@@ -1,3 +1,4 @@
+set FOREIGN_KEY_CHECKS=0;
 drop table if exists Warehouses;
 drop table if exists Cookies;
 drop table if exists Recipes;
@@ -5,8 +6,6 @@ drop table if exists Pallets;
 drop table if exists Orders;
 drop table if exists Customers;
 drop table if exists OrderSpecifications;
-
-set FOREIGN_KEY_CHECKS=0;
 
 create table Warehouses(
 ingredientName varchar(50),
@@ -58,7 +57,7 @@ address varchar(100),
 primary key(customerName)
 );
 
-create table OrderSpecification(
+create table OrderSpecifications(
 nbrPallets int,
 orderId int,
 cookieName varchar(50),
