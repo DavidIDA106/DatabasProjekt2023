@@ -17,7 +17,7 @@ public class Database {
 	 * Modify it to fit your environment and then use this string when connecting to your database!
 	 */
 	private Connection conn;
-	private static final String jdbcString = "jdbc:mysql://localhost/krusty";
+	private static final String jdbcString = "jdbc:mysql://puccini.cs.lth.se/hbg37";
 
 	// For use with MySQL or PostgreSQL
 	private static final String jdbcUsername = "hbg37";

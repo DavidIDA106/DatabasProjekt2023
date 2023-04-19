@@ -1,1 +1,1 @@
-SELECT * FROM Pallets;
+SELECT * FROM Recipes
