@@ -1,0 +1,16 @@
+{
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "puccini.cs.lth.se",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "hbg37",
+      "database": "hbg37",
+      "username": "hbg37"
+    }
+  ]
+}
