@@ -27,7 +27,7 @@ ingredientName varchar(50),
 cookieName varchar(50),
 amount double(2,1),
 primary key (ingredientName, cookieName),
-foreign key (ingredientName) references Ingredients(ingredientName),
+foreign key (ingredientName) references Warehouses (ingredientName),
 foreign key (cookieName) references Cookies(cookieName)
 );
 
@@ -68,7 +68,3 @@ foreign key (cookieName) references Cookies(cookieName)
 );
 
 set FOREIGN_KEY_CHECKS=1;
-
-
-
-
