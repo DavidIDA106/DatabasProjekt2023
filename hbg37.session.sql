@@ -1,1 +1,1 @@
-SELECT * FROM Recipes
+SELECT ingredientName as name, quantityInStock as amount, unit FROM Warehouses
