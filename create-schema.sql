@@ -11,7 +11,7 @@ create table Warehouses(
 ingredientName varchar(50),
 quantityInStock int,
 unit varchar (20),
-lastDeliveryAmount double (2,1),
+lastDeliveryAmount int,
 lastDeliveryDate date,
 primary key (ingredientName)
 ); 
@@ -24,9 +24,9 @@ primary key (cookieName)
 create table Recipes(
 ingredientName varchar(50),
 cookieName varchar(50),
-amount double(2,1),
+amount int,
 primary key (ingredientName, cookieName),
-foreign key (ingredientName) references Warehouses (ingredientName),
+foreign key (ingredientName) references Warehouses(ingredientName),
 foreign key (cookieName) references Cookies(cookieName)
 );
 
