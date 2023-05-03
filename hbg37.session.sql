@@ -1,1 +1,1 @@
-SELECT ingredientName as name, quantityInStock as amount, unit FROM Warehouses
+SELECT Recipes.*, Warehouses.unit FROM Recipes, Warehouses WHERE Recipes.ingredientName = Warehouses.ingredientName
