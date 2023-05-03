@@ -24,7 +24,7 @@ group = 'com.krusty'
 version = '1.0'
 description = 'Krusty'
 sourceCompatibility = '11'
-targetCompatibility = '11'
+targetCompatibility = '20'
 
 application {
     mainClassName = "krusty.ServerMain"
