@@ -43,10 +43,6 @@ public class Database {
 
 	public String getRawMaterials(Request req, Response res) {
 		try{
-			// String sql = "SELECT ingredientName as name, quantityInStock as amount, unit FROM Warehouse";
-			// PreparedStatement ps = conn.prepareStatement(sql);
-			// ResultSet rs = ps.executeQuery();
-
 			ResultSet rs = conn.createStatement().executeQuery("SELECT ingredientName as name, quantityInStock as amount, unit FROM Warehouses");
 			String json = krusty.Jsonizer.toJson(rs, "raw-materials");
 			return json;
