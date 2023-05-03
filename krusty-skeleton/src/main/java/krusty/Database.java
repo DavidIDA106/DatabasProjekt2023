@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+
 import static krusty.Jsonizer.toJson;
 
 public class Database {
@@ -42,9 +44,11 @@ public class Database {
 	}
 
 	public String getRawMaterials(Request req, Response res) {
+
+
 		try{
 			ResultSet rs = conn.createStatement().executeQuery("SELECT ingredientName as name, quantityInStock as amount, unit FROM Warehouses");
-			String json = krusty.Jsonizer.toJson(rs, "raw-materials");
+			String json = Jsonizer.toJson(rs, "raw-materials");
 			return json;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -53,6 +57,14 @@ public class Database {
 	}
 
 	public String getCookies(Request req, Response res) {
+
+		try{
+			ResultSet rs = conn.createStatement().executeQuery("SELECT cookieName as name FROM Cookies");
+			String json = Jsonizer.toJson(rs, "cookies");
+			return json;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return "{\"cookies\":[]}";
 	}
 
