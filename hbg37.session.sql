@@ -1,1 +1,2 @@
-SELECT Recipes.*, Warehouses.unit FROM Recipes, Warehouses WHERE Recipes.ingredientName = Warehouses.ingredientName
+SELECT * FROM Cookies;
+

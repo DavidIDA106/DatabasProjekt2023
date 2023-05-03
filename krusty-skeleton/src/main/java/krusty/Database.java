@@ -1,18 +1,24 @@
 package krusty;
 
+
 import spark.Request;
 import spark.Response;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.BufferedReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import javax.naming.spi.DirStateFactory.Result;
 
 import static krusty.Jsonizer.toJson;
 
@@ -40,7 +46,26 @@ public class Database {
 	// TODO: Implement and change output in all methods below!
 
 	public String getCustomers(Request req, Response res) {
+
+		try {
+			ResultSet rs = conn.createStatement().executeQuery("SELECT customerName as name, address from Customers");
+			String json = Jsonizer.toJson(rs, "customers");
+			return json;
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
 		return "{}";
+	}
+	public String getCookies(Request req, Response res) {
+
+		try{
+			ResultSet rs = conn.createStatement().executeQuery("SELECT cookieName as name FROM Cookies");
+			String json = Jsonizer.toJson(rs, "cookies");
+			return json;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "{\"cookies\":[]}";
 	}
 
 	public String getRawMaterials(Request req, Response res) {
@@ -56,17 +81,6 @@ public class Database {
 		return "{}";
 	}
 
-	public String getCookies(Request req, Response res) {
-
-		try{
-			ResultSet rs = conn.createStatement().executeQuery("SELECT cookieName as name FROM Cookies");
-			String json = Jsonizer.toJson(rs, "cookies");
-			return json;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return "{\"cookies\":[]}";
-	}
 
 	public String getRecipes(Request req, Response res) {
 
@@ -85,7 +99,31 @@ public class Database {
 	}
 
 	public String reset(Request req, Response res) {
-		return "{}";
+		
+		try(Statement ps = conn.createStatement()){
+			
+			String[] sql;
+			Path filePath = Path.of("src\\main\\sql_files\\initial-data.sql");
+			
+				conn.setAutoCommit(false);
+				String stringOfFile = Files.readString(filePath);
+				sql = stringOfFile.split(";");
+				Statement stmt = conn.createStatement();
+				conn.commit();
+				
+				for (String str : sql) {
+					stmt.executeUpdate(str);
+				}
+				
+
+			return "{" + "\"status\": \"ok\"}";
+
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "{"+ "\"status\": \"ok\"}";	
 	}
 
 	public String createPallet(Request req, Response res) {

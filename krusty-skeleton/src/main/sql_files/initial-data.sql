@@ -1,9 +1,12 @@
+use hbg37;
 set FOREIGN_KEY_CHECKS = 0;
-DELETE FROM Recipes;
-DELETE FROM Cookies;
-DELETE FROM Warehouses;
-DELETE FROM Pallets;
-set FOREIGN_KEY_CHECKS = 1;
+TRUNCATE TABLE Recipes;
+TRUNCATE TABLE Cookies;
+TRUNCATE TABLE Warehouses;
+TRUNCATE TABLE Pallets;
+TRUNCATE TABLE Customers;
+TRUNCATE TABLE Orders;
+
 
 insert into Cookies (cookieName) VALUES
 ("Almond delight"),
@@ -85,3 +88,4 @@ insert into Customers (customerName, address) VALUES
 ("Gästkakor AB", "Hässleholm"),
 ("Skånekakor AB", "Perstorp");
 
+set FOREIGN_KEY_CHECKS = 1;
