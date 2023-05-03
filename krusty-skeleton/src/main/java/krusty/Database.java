@@ -69,6 +69,14 @@ public class Database {
 	}
 
 	public String getRecipes(Request req, Response res) {
+
+		try {
+			ResultSet rs = conn.createStatement().executeQuery("SELECT Recipes.*, Warehouses.unit FROM Recipes, Warehouses WHERE Recipes.ingredientName = Warehouses.ingredientName");
+			String json = Jsonizer.toJson(rs, "recipes");
+			return json;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return "{}";
 	}
 
