@@ -12,5 +12,6 @@
       "database": "hbg37",
       "username": "hbg37"
     }
-  ]
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
