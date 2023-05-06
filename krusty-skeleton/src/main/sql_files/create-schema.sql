@@ -37,10 +37,12 @@ palletId int auto_increment,
 blockedStatus boolean,
 productionDate datetime,
 location varchar(50),
+customerName varchar(50),
 deliveryDate datetime,
 primary key (palletId),
 foreign key (cookieName) references Cookies(cookieName),
-foreign key (orderId) references Orders (orderId)
+foreign key (orderId) references Orders (orderId),
+foreign key (customerName) references Customers(customerName)
 );
 
 create table Orders(

@@ -95,7 +95,74 @@ public class Database {
 	}
 
 	public String getPallets(Request req, Response res) {
-		return "{\"pallets\":[]}";
+		
+		List<String> query = new ArrayList<String>();
+		List<String> values = new ArrayList<String>();
+
+		String json = "";
+
+		String sql = "SELECT palletId AS id, cookieName AS cookie, productionDate AS production_date, Customers.customerName AS customer, blockedStatus as blocked" 
+		+ " FROM Pallets"
+		+ " LEFT JOIN Customers ON Customers.customerName = Pallets.customerName ";
+		
+		if(req.queryParams("from") != null){
+			query.add("productionDate >= ? ");
+			values.add(req.queryParams("from"));
+		}
+
+		if(req.queryParams("to") != null){
+			if(query.size() > 0){
+				query.add("AND ");
+			}
+			query.add("productionDate <= ? ");
+			values.add(req.queryParams("to"));
+		}
+
+
+		if(req.queryParams("cookie") != null){
+			if(query.size() > 0){
+				query.add("AND ");
+			}
+			query.add("cookieName = ? ");
+			values.add(req.queryParams("cookie"));
+		}
+
+		if(req.queryParams("blocked") != null){
+			if(query.size() > 0){
+				query.add("AND ");
+			}
+			query.add("blockedStatus = ? ");
+			values.add(req.queryParams("blocked"));
+		}
+		
+		if(query.size() > 0){
+			query.add(0, "WHERE ");
+			for(String s : query){
+				sql += s;
+			}
+		}
+
+		sql += "ORDER BY (productionDate)";
+
+		try {
+
+			PreparedStatement ps = conn.prepareStatement(sql);
+			
+			for(int i = 0; i < values.size(); i++){
+				ps.setString(i+1, values.get(i));	
+			}
+			
+			ResultSet rs = ps.executeQuery();
+			json = krusty.Jsonizer.toJson(rs, "pallets");
+			return json;
+		} 
+		
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		//return "{\"pallets\":[]}";
+		return json;
 	}
 
 	public String reset(Request req, Response res) {
@@ -103,7 +170,7 @@ public class Database {
 		try(Statement ps = conn.createStatement()){
 			
 			String[] sql;
-			Path filePath = Path.of("src\\main\\sql_files\\initial-data.sql");
+			Path filePath = Path.of("krusty-skeleton/src/main/sql_files/initial-data.sql");
 			
 				conn.setAutoCommit(false);
 				String stringOfFile = Files.readString(filePath);
@@ -127,6 +194,72 @@ public class Database {
 	}
 
 	public String createPallet(Request req, Response res) {
-		return "{}";
+		
+		String cookie = req.queryParams("cookie");
+		String sql = "SELECT cookieName FROM Cookies WHERE cookieName = '" + cookie + "';";
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+
+		try {
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+
+			if(!rs.next()){
+				return krusty.Jsonizer.anythingToJson("unknown cookie", "error");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return krusty.Jsonizer.anythingToJson("error", "status");
+		}
+
+
+		sql = "insert into Pallets(productionDate, cookieName, blockedStatus)" 
+		+ "values(NOW(), '" + cookie + "', true)";
+
+		String json = "";
+
+		try {
+			
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.executeUpdate();
+			ResultSet rs1 = ps.getGeneratedKeys();
+			rs1.next();
+			conn.commit();
+
+
+			sql = "UPDATE Warehouses, Recipes SET Warehouses.quantityInStock = Warehouses.quantityInStock - Recipes.amount"
+                +
+                " WHERE Warehouses.ingredientName = Recipes.ingredientName AND Recipes.cookieName = '"
+                + cookie + "';";
+
+
+
+
+			ps = conn.prepareStatement(sql);
+			ps.executeUpdate();
+			conn.commit();
+
+			json = "{\n \"status\": \"ok\", \n \"id\": " + rs1.getInt(1) + " \n}"; 
+
+		} catch (SQLException e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+			return krusty.Jsonizer.anythingToJson("error", "status");
+		} finally {
+			try {
+				conn.setAutoCommit(true);
+				return json;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return "";
 	}
 }
