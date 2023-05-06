@@ -34,7 +34,7 @@ create table Pallets(
 orderID int,
 cookieName varchar(50),
 palletId int auto_increment,
-blockedStatus boolean,
+blockedStatus varchar(10),
 productionDate datetime,
 location varchar(50),
 customerName varchar(50),

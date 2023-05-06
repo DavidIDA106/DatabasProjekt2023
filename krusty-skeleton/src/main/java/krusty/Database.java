@@ -4,13 +4,11 @@ package krusty;
 import spark.Request;
 import spark.Response;
 
-import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -179,18 +177,16 @@ public class Database {
 				conn.commit();
 				
 				for (String str : sql) {
-					stmt.executeUpdate(str);
+					stmt.execute(str);
 				}
 				
 
 			return "{" + "\"status\": \"ok\"}";
 
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "{"+ "\"status\": \"ok\"}";	
+		return "{"+ "\"status\": \"no\"}";	
 	}
 
 	public String createPallet(Request req, Response res) {
@@ -216,7 +212,7 @@ public class Database {
 
 
 		sql = "insert into Pallets(productionDate, cookieName, blockedStatus)" 
-		+ "values(NOW(), '" + cookie + "', true)";
+		+ "values(NOW(), '" + cookie + "', 'no')";
 
 		String json = "";
 
@@ -230,7 +226,7 @@ public class Database {
 			conn.commit();
 
 
-			sql = "UPDATE Warehouses, Recipes SET Warehouses.quantityInStock = Warehouses.quantityInStock - Recipes.amount"
+			sql = "UPDATE Warehouses, Recipes SET Warehouses.quantityInStock = Warehouses.quantityInStock - Recipes.amount*54"
                 +
                 " WHERE Warehouses.ingredientName = Recipes.ingredientName AND Recipes.cookieName = '"
                 + cookie + "';";
